@@ -1,6 +1,11 @@
 html {
   font-size: 62.5%;
   box-sizing: border-box;
+  background: url(./img/mathematics-1509559_1920.jpg) no-repeat center center fixed; 
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
 }
 
 *, *::before, *::after {
@@ -9,9 +14,19 @@ html {
   box-sizing: inherit;
 }
 
+body{
+  text-align: center;
+}
+
+body > h1{
+  font-size: 26px;
+  font-style: verdana,sans-serif;arial;
+  padding: 8px;
+}
 .container {
   border: 1px solid #ccc;
   border-radius: 5px;
+  background-color: #F11554;
   position: absolute;
   top: 50%;
   left: 50%;
@@ -74,7 +89,7 @@ button:hover {
 }
 
 .equal-sign {
-  background-color: #E115F1;
+  background-color: #4F15F1;
   border-color: #337cac;
   color: #fff;
   grid-row: 2/5;
