@@ -12,12 +12,20 @@ function enterNum(digit) {
     calcObj.screenNumber = digit;
     calcObj.waitingForSecondOperand = false;
   } else {
-    calcObj.screenNumber = screenNumber === '0' ? digit : screenNumber + digit;
+    if(calcObj.screenNumber = screenNumber === '0')
+    {
+      calcObj.screenNumber=digit;
+      //console.log(screenNumber);
+    }
+    else
+    {
+      calcObj.screenNumber = screenNumber + digit;
+    }
   }
 }
 
 function decimalPoint(dot) {
-  if (calcObj.waitingForSecondOperand === true) return;
+  if (calcObj.waitingForSecondOperand === true);
   
   // If the `screenNumber` does not contain a decimal point
   if (!calcObj.screenNumber.includes(dot)) {
@@ -32,7 +40,6 @@ function handlingOperator(nextOperator) {
 
   if (currentOperator && calcObj.waitingForSecondOperand)  {
     calcObj.currentOperator = nextOperator;
-    return;
   }
 
   if (inputOne == null) {
