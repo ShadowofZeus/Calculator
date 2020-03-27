@@ -3,35 +3,48 @@ const calcObj = {
   inputOne: null,
   secondNumberFlag: false,
   currentOperator: null,
+  waitingForSecondOperand: false
 };
 
 function enterNum(digit) {
   const { screenNumber, waitingForSecondOperand } = calcObj;
 
-  if (waitingForSecondOperand === true) {
-    calcObj.screenNumber = digit;
-    calcObj.waitingForSecondOperand = false;
-  } else {
-    if(calcObj.screenNumber = screenNumber === '0')
+    if (waitingForSecondOperand === true) 
     {
-      calcObj.screenNumber=digit;
-      //console.log(screenNumber);
-    }
-    else
+      calcObj.screenNumber = digit;
+      calcObj.waitingForSecondOperand = false;
+    } 
+    else 
     {
-      calcObj.screenNumber = screenNumber + digit;
+      if(calcObj.screenNumber === '0')
+      {
+        calcObj.screenNumber=digit;
+    
+      }
+      ///limit the number of digits on the screen display to 11 characters
+      else if(calcObj.screenNumber.length<=10)
+      {
+        calcObj.screenNumber = screenNumber + digit;
+      }
     }
-  }
+
 }
 
-function decimalPoint(dot) {
-  if (calcObj.waitingForSecondOperand === true);
-  
+function decimalPoint(dot) {  
+  const { currentOperator,waitingForSecondOperand } = calcObj;
+  const display = document.querySelector('.display');
+
+  if (calcObj.waitingForSecondOperand === true) 
+  {
+     return;
+  }
   // If the `screenNumber` does not contain a decimal point
-  if (!calcObj.screenNumber.includes(dot)) {
+  if (!calcObj.screenNumber.includes(dot)) 
+  {
     // Append the decimal point
     calcObj.screenNumber += dot;
   }
+
 }
 
 function handlingOperator(nextOperator) {
@@ -40,15 +53,20 @@ function handlingOperator(nextOperator) {
 
   if (currentOperator && calcObj.waitingForSecondOperand)  {
     calcObj.currentOperator = nextOperator;
+    return;
+    //leave the function with no calculations done
   }
 
-  if (inputOne == null) {
+  if (inputOne == null) 
+  {
     calcObj.inputOne = inputValue;
-  } else if (currentOperator) {
+  } 
+  else if (currentOperator) 
+  {
     const currentValue = inputOne || 0;
-    const result = performCalculation[currentOperator](currentValue, inputValue);
-
-    calcObj.screenNumber = String(result);
+    const result = performCalculation(currentValue,currentOperator,inputValue)
+//calculate the result and get it at 4 decimal places and as a string using toFixed method.
+    calcObj.screenNumber = result.toFixed(4);
     calcObj.inputOne = result;
   }
 
@@ -56,17 +74,38 @@ function handlingOperator(nextOperator) {
   calcObj.currentOperator = nextOperator;
 }
 
-const performCalculation = {
-  '/': (inputOne, secondOperand) => inputOne / secondOperand,
+function performCalculation(firstV,operator,secondV)
+{
+  let result = null;
+  const display = document.querySelector('input'); 
+  
+  switch(operator){
+    case '/':
+      result = firstV/secondV;
+      return result;
+      break;
+    
+    case '*':
+      result = firstV*secondV;
+      return result;
+      break;
+    
+    case '+':
+      result = firstV+secondV;
+      return result;
+      break;
+    
+    case '-':
+      result = firstV-secondV;
+      return result;
+      break;
+    
+    case '=':
+      return secondV;
+      break;
 
-  '*': (inputOne, secondOperand) => inputOne * secondOperand,
-
-  '+': (inputOne, secondOperand) => inputOne + secondOperand,
-
-  '-': (inputOne, secondOperand) => inputOne - secondOperand,
-
-  '=': (inputOne, secondOperand) => secondOperand
-};
+  }
+}
 
 function resetCalculator() {
   calcObj.screenNumber = '0';
@@ -78,9 +117,8 @@ function resetCalculator() {
 function updateScreen() {
   const display = document.querySelector('.display');
   display.value = calcObj.screenNumber;
-}
 
-updateScreen();
+}
 
 const keys = document.querySelector('.keypad');
 keys.addEventListener('click', (event) => {
@@ -95,10 +133,21 @@ keys.addEventListener('click', (event) => {
     return;
   }
 
-  if (target.classList.contains('decimal')) {
-    decimalPoint(target.value);
-    updateScreen();
-    return;
+  if (target.classList.contains('decimal')) 
+  {
+      if (calcObj.waitingForSecondOperand === true) 
+    { 
+      calcObj.screenNumber = '0'+target.value;
+      console.log(calcObj.screenNumber);
+      updateScreen();
+    }
+    else
+    {
+      decimalPoint(target.value);
+      updateScreen();
+      return;
+    }
+    
   }
 
   if (target.classList.contains('clrscreen')) {
